@@ -1,1 +1,9 @@
-
+data <- read.table("household_power_consumption.txt", header = TRUE, sep = ";", na.strings = "?")
+data07 <- rbind(data[data$Date == "1/2/2007",], data[data$Date == "2/2/2007",])
+data07$Date <- as.Date(data07$Date, "%d/%m/%Y")
+data07 <- cbind(data07, "Datetime07" = as.POSIXct(paste(data07$Date, data07$Time)))
+with(data07, {plot(Sub_metering_1 ~ Datetime07, type = "l", xlab = "", ylab = "Energy Sub Metering")})
+lines(data07$Sub_metering_2~data07$Datetime07, col = "Red")
+lines(data07$Sub_metering_3~data07$Datetime07, col = "Blue")
+legend("topright", lty=1, lwd=3, col=c("black", "red", "blue") ,legend= c("Sub_metering_1", "Sub_metering_2","Sub_metering_3"))
+dev.copy(png, file = "plot3.png", height = 480, width = 480)
